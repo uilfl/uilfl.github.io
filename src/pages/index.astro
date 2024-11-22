@@ -3,56 +3,50 @@ import Layout from "../layouts/Layout.astro";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import type { loadTSConfig } from "node_modules/astro/dist/core/config";
+import type { Image } from "astro:assets";
 ---
 
 <Layout title="Your Name - About" activeTab="about">
   <div class="grid md:grid-cols-3 gap-6">
     <div class="md:col-span-1">
-      <Card>
-        <CardContent className="flex flex-col items-center pt-6">
-          <Avatar className="w-24 h-24 mb-4">
-            <AvatarImage src="/profile.jpg" alt="Your Name" />
-            <AvatarFallback>YN</AvatarFallback>
-          </Avatar>
-          <CardTitle className="text-center">Your Name</CardTitle>
-          <p class="text-sm text-muted-foreground text-center mt-2">
-            Position or Title
-          </p>
-          <div class="flex gap-2 mt-4">
-            <Button variant="outline" size="sm">
-              <a href="https://linkedin.com">LinkedIn</a>
-            </Button>
-            <Button variant="outline" size="sm">
-              <a href="https://github.com">GitHub</a>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-
-    <div class="md:col-span-2">
-      <Card>
-        <CardHeader>
-          <CardTitle>About Me</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p class="text-muted-foreground">
-            Welcome to my personal website. I am a [Position] at [Institution],
-            specializing in [Research Areas]. My research focuses on [Specific
-            Topics].
-          </p>
-        </CardContent>
-      </Card>
-
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Contact</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>Email: your.email@institution.edu</p>
-          <p>Office: Building Name, Room XXX</p>
-        </CardContent>
-      </Card>
+      <CardTitle className="text-center">Your Name</CardTitle>
+      <p class="text-sm text-muted-foreground text-center mt-2">
+        Position or Title
+      </p>
+      <div class="flex gap-2 mt-4">
+        <Button variant="outline" size="sm">
+          <a href="https://linkedin.com">LinkedIn</a>
+        </Button>
+        <Button variant="outline" size="sm">
+          <a href="https://github.com">GitHub</a>
+        </Button>
+      </div>
     </div>
   </div>
 </Layout>
+
+<div class="md:col-span-2">
+  <Card>
+    <CardHeader>
+      <CardTitle>About Me</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p class="text-muted-foreground">
+        Welcome to my personal website. I am a [Position] at [Institution],
+        specializing in [Research Areas]. My research focuses on [Specific
+        Topics].
+      </p>
+    </CardContent>
+  </Card>
+
+  <Card className="mt-6">
+    <CardHeader>
+      <CardTitle>Contact</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p>Email: your.email@institution.edu</p>
+      <p>Office: Building Name, Room XXX</p>
+    </CardContent>
+  </Card>
+</div>
