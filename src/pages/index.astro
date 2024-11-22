@@ -1,66 +1,20 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
-import { Button } from "../components/ui/button";
-import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.jsx";
+import { Card, CardContent, CardTitle } from "../components/ui/card";
 ---
 
 <Layout title="Your Name - About" activeTab="about">
   <div class="grid md:grid-cols-3 gap-6">
     <div class="md:col-span-1">
-      <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
-        <div class="flex flex-col items-center p-6">
-          <div class="relative h-24 w-24 mb-4">
-            <img
-              src="/profile.jpg"
-              alt="Your Name"
-              class="rounded-full object-cover"
-              width={96}
-              height={96}
-            />
-          </div>
-          <h3 class="text-2xl font-semibold leading-none tracking-tight">
-            Your Name
-          </h3>
-        </div>
-      </div>
-    </div>
-
-    <div class="md:col-span-2">
       <Card>
-        <CardHeader>
-          <CardTitle>About Me</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p class="text-muted-foreground">
-            Welcome to my personal website. I am a [Position] at [Institution],
-            specializing in [Research Areas]. My research focuses on [Specific
-            Topics].
+        <CardContent className="flex flex-col items-center pt-6">
+          <CardTitle className="text-center mt-4">Your Name</CardTitle>
+          <p class="text-sm text-muted-foreground text-center mt-2">
+            Researcher
           </p>
         </CardContent>
       </Card>
-
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Contact</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>Email: your.email@institution.edu</p>
-          <p>Office: Building Name, Room XXX</p>
-        </CardContent>
-      </Card>
     </div>
+    <!-- Add other content here -->
   </div>
 </Layout>
-
-<style>
-  .rounded-full {
-    border-radius: 9999px;
-  }
-</style>
