@@ -5,7 +5,7 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://yourusername.github.io',
-  base: '/your-repo-name',
+  site: 'https://uilfl.github.io',
+  base: '/uilfl.github.io',
   integrations: [react()],
 });
