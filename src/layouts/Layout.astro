@@ -1,57 +1,65 @@
----
+import ../styles/global.css;
+
 interface Props {
   title: string;
+  activeTab: 'about' | 'research' | 'cv';
 }
 
-const { title } = Astro.props;
+const { title, activeTab } = Astro.props;
+
+const navItems = [
+  { label: 'About', href: '/' },
+  { label: 'Research', href: '/research' },
+  { label: 'CV', href: '/cv' }
+];
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
   </head>
-  <body>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="/projects">Projects</a>
-    </nav>
-    <main>
-      <slot />
-    </main>
-    <footer>
-      <p>© 2024 Your Name</p>
-    </footer>
+  <body class="min-h-screen bg-background font-sans antialiased">
+    <div class="container mx-auto px-4 max-w-4xl">
+      <header class="sticky top-0 z-40 w-full border-b bg-white">
+        <div class="flex h-16 items-center justify-between py-4">
+          <nav class="flex items-center space-x-4 lg:space-x-6">
+            <a 
+              href="/" 
+              class="text-2xl font-bold tracking-tight 
+              text-primary hover:text-primary/80"
+            >
+              Your Name
+            </a>
+            <nav class="flex items-center space-x-4 lg:space-x-6">
+              {navItems.map((item) => (
+                <a
+                  href={item.href}
+                  class={`text-sm font-medium transition-colors 
+                    hover:text-primary 
+                    ${activeTab === (item.href === '/' ? 'about' : item.href.replace('/', '')) 
+                      ? 'text-primary' 
+                      : 'text-muted-foreground'}`}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          </nav>
+        </div>
+      </header>
+
+      <main class="py-8">
+        <slot />
+      </main>
+
+      <footer class="border-t py-6 text-center">
+        <p class="text-sm text-muted-foreground">
+          © {new Date().getFullYear()} Your Name. All rights reserved.
+        </p>
+      </footer>
+    </div>
   </body>
 </html>
-<style is:global>
-  :root {
-    --accent: 136, 58, 234;
-    --accent-light: 224, 204, 250;
-    --accent-dark: 49, 10, 101;
-    --accent-gradient: linear-gradient(
-      45deg,
-      rgb(var(--accent)),
-      rgb(var(--accent-light)) 30%,
-      white 60%
-    );
-  }
-  html {
-    font-family: system-ui, sans-serif;
-    background: #13151a;
-  }
-  code {
-    font-family:
-      Menlo,
-      Monaco,
-      Lucida Console,
-      Liberation Mono,
-      DejaVu Sans Mono,
-      Bitstream Vera Sans Mono,
-      Courier New,
-      monospace;
-  }
-</style>
