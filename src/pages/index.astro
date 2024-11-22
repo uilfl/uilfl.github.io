@@ -21,29 +21,29 @@ import { Button } from "@/components/ui/button";
       </div>
     </div>
   </div>
+
+  <div class="md:col-span-2">
+    <Card>
+      <CardHeader>
+        <CardTitle>About Me</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p class="text-muted-foreground">
+          Welcome to my personal website. I am a [Position] at [Institution],
+          specializing in [Research Areas]. My research focuses on [Specific
+          Topics].
+        </p>
+      </CardContent>
+    </Card>
+
+    <Card className="mt-6">
+      <CardHeader>
+        <CardTitle>Contact</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>Email: your.email@institution.edu</p>
+        <p>Office: Building Name, Room XXX</p>
+      </CardContent>
+    </Card>
+  </div>
 </Layout>
-
-<div class="md:col-span-2">
-  <Card>
-    <CardHeader>
-      <CardTitle>About Me</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <p class="text-muted-foreground">
-        Welcome to my personal website. I am a [Position] at [Institution],
-        specializing in [Research Areas]. My research focuses on [Specific
-        Topics].
-      </p>
-    </CardContent>
-  </Card>
-
-  <Card className="mt-6">
-    <CardHeader>
-      <CardTitle>Contact</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <p>Email: your.email@institution.edu</p>
-      <p>Office: Building Name, Room XXX</p>
-    </CardContent>
-  </Card>
-</div>
