@@ -1,5 +1,15 @@
 ---
-import "../styles/globals.css";
+// Layout.astro
+import { ThemeProvider } from "@/components/theme-provider";
+import { ModeToggle } from "@/components/mode-toggle";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 interface Props {
   title: string;
@@ -16,36 +26,62 @@ const navItems = [
 ---
 
 <!doctype html>
-<!-- Rest of your HTML remains the same -->
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width" />
-  <meta name="description" content="Personal academic website" />
-  <title>{title}</title>
-</head>
-<body>
-  <nav>
-    <div class="nav-links">
-      {
-        navItems.map((item) => (
-          <a
-            href={item.href}
-            class={
-              activeTab === item.href.replace("/", "") ||
-              (item.href === "/" && activeTab === "about")
-                ? "active"
-                : ""
-            }>
-            {item.label}
-          </a>
-        ))
-      }
-    </div>
-  </nav>
-  <main>
-    <slot />
-  </main>
-  <footer>
-    <p>© {new Date().getFullYear()} Your Name</p>
-  </footer>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Personal academic website" />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen bg-background">
+    <ThemeProvider defaultTheme="system" storageKey="theme">
+      <div class="relative flex min-h-screen flex-col">
+        <header
+          class="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div class="container flex h-16 items-center">
+            <NavigationMenu>
+              <NavigationMenuList>
+                {
+                  navItems.map((item) => (
+                    <NavigationMenuItem>
+                      <NavigationMenuLink
+                        href={item.href}
+                        className={`px-4 py-2 text-sm font-medium transition-colors hover:text-primary
+                        ${
+                          activeTab ===
+                          (item.href === "/"
+                            ? "about"
+                            : item.href.replace("/", ""))
+                            ? "text-primary"
+                            : "text-muted-foreground"
+                        }`}>
+                        {item.label}
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+                  ))
+                }
+              </NavigationMenuList>
+            </NavigationMenu>
+            <div
+              class="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+              <ModeToggle client:load />
+            </div>
+          </div>
+        </header>
+        <main class="flex-1">
+          <div class="container py-6 md:py-10">
+            <slot />
+          </div>
+        </main>
+        <footer class="border-t py-6 md:py-0">
+          <div
+            class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+            <p class="text-sm text-muted-foreground">
+              Built with Astro and shadcn/ui
+            </p>
+          </div>
+        </footer>
+      </div>
+    </ThemeProvider>
+  </body>
+</html>
