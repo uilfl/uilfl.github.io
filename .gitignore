@@ -4,6 +4,7 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
+_drafts/
 
 # Ruby environment
 .bundle/
@@ -17,3 +18,4 @@ vendor/bundle
 .Trashes
 ehthumbs.db
 Thumbs.db
+publish_draft.sh
