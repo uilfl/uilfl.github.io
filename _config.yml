@@ -37,17 +37,17 @@ masthead_title: # overrides the website title displayed in the masthead, use " "
 
 # Site Author
 author:
-  name: "Your Name"
+  name: "Yusheng Chen"
   avatar: # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio: "A brief description about yourself"
-  location: "Your Location"
+  location: "Taipei, Shanghai and Tokyo"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
       url: "mailto:your.email@example.com"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/yourusername"
+      url: "https://github.com/uilfl"
 
 # Site Footer
 footer:
