@@ -113,8 +113,9 @@ kramdown:
 
 # Sass/SCSS
 sass:
+  quiet_deps: true
   sass_dir: _sass
-  style: compressed # https://sass-lang.com/documentation/file.SASS_REFERENCE.html#output_style
+  style: compressed
 
 # Outputting
 permalink: /:categories/:title/
