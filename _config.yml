@@ -113,7 +113,6 @@ kramdown:
 
 # Sass/SCSS
 sass:
-  quiet_deps: true
   sass_dir: _sass
   style: compressed
 
