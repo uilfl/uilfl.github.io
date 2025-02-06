@@ -136,7 +136,7 @@ DEPENDENCIES
   bigdecimal
   csv
   http_parser.rb (~> 0.6.0)
-  jekyll (~> 4.3.3)
+  jekyll (~> 4.0)
   jekyll-feed (~> 0.17.0)
   jekyll-gist
   jekyll-include-cache
