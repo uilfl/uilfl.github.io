@@ -1,32 +1,48 @@
 # Personal Blog Development with GitHub Pages and Jekyll
 
-This guide outlines the steps and technical details for setting up a minimalist personal blog using GitHub Pages and Jekyll. The blog will use Markdown files for posts, and the focus is on a clean and reader-friendly design.
+This guide outlines the steps and technical details for setting up a minimalist personal blog using GitHub Pages and Jekyll. The blog uses Markdown files for posts, with a focus on a clean and reader-friendly design.
 
-## Workflow
+## Content Organization
 
-1. **Write in Markdown Files**:
+This blog uses a custom folder structure for managing published and draft content:
 
-   - Create each blog post as a Markdown file (`.md`).
-   - Store the posts in the `/_posts` directory of your GitHub repository.
-   - Use front matter to define metadata such as title, date, and tags.
+- **`_public/`**: Contains Markdown files for **published** blog posts that appear on the website
+- **`_posts/`**: Contains Markdown files for **draft** posts that are still being worked on (not published)
 
-2. **Push to Public Folder**:
+### Workflow
 
-   - Store your Jekyll-generated site in the `public` folder of your repository.
-   - This folder will contain the HTML files generated from your Markdown posts.
+1. **Write Draft Posts**:
+   - Create draft blog posts as Markdown files (`.md`) in the `/_posts` directory
+   - Use front matter to define metadata such as title, date, and tags
+   - Example filename: `2025-03-01-my-draft-post.md`
 
-3. **Push to Git**:
+2. **Publish Posts**:
+   - When a draft is ready for publication, move it from `/_posts` to `/_public`
+   - The post will automatically be included in the next site build
+   - Posts in `/_public` are displayed on the homepage and in archives
 
-   - Push your changes (Markdown files and the public folder) to your GitHub repository.
-   - Ensure that your `public` folder is excluded from version control with `.gitignore` (Jekyll will regenerate it).
+3. **Build and Deploy**:
+   - Jekyll automatically builds the site from `/_public` content
+   - The generated site is created in the `_site` directory (excluded from version control)
+   - Push changes to GitHub, and GitHub Pages will automatically deploy the site
 
-4. **Publish on GitHub Pages**:
-   - Configure the GitHub Pages settings for your repository to deploy the site.
-   - Make sure the source is set to the `main` or `gh-pages` branch (depending on your setup).
+## Example Post Structure
+
+```markdown
+---
+title: "My Blog Post Title"
+date: 2025-03-01
+categories:
+  - blog
+tags:
+  - topic1
+  - topic2
+---
+
+Your blog post content goes here...
+```
 
 ## Jekyll Setup
-
-1. **Initialize a New Jekyll Project**:
 
    - If you don't already have a Jekyll project, create one by running:
      ```bash
@@ -49,15 +65,17 @@ This guide outlines the steps and technical details for setting up a minimalist 
 
 ## Site Structure
 
-- **`/_posts/`**: This directory will hold all your blog posts.
+- **`/_public/`**: This directory holds all **published** blog posts that appear on the website.
   - Each post should follow the naming convention: `YYYY-MM-DD-title.md`.
+- **`/_posts/`**: This directory holds **draft** blog posts that are still being worked on.
+  - Draft posts are not published until moved to `/_public`.
 - **`/assets/`**: Store any static files like images, stylesheets, or JavaScript here.
 - **`/_config.yml`**: Configure Jekyll settings like title, description, and theme settings.
   - Example:
     ```yaml
     title: "My Personal Blog"
     description: "A minimalist blog focused on readability."
-    theme: "minimal-mistakes"
+    theme: "minimal-mistakes-jekyll"
     ```
 
 ## Design Considerations
