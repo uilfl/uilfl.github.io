@@ -153,9 +153,26 @@ compress_html:
   ignore:
     envs: development
 
+# Collections
+collections:
+  public:
+    output: true
+    permalink: /:categories/:title/
+
 # Defaults
 defaults:
-  # _posts
+  # _public (published posts)
+  - scope:
+      path: ""
+      type: public
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      comments: true
+      share: true
+      related: true
+  # _posts (drafts - not published by default)
   - scope:
       path: ""
       type: posts
@@ -166,3 +183,4 @@ defaults:
       comments: true
       share: true
       related: true
+      published: false
