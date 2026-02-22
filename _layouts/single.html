@@ -36,6 +36,24 @@ layout: default
           </h1>
           {%- endif %}
           {% include page__meta.html %}
+          {% if page.collection == 'public' %}
+            {% assign post_author = page.author | default: site.author %}
+            <div class="post__byline">
+              <span class="post__byline-name">{{ post_author.name | default: post_author }}</span>
+              {% if site.author.location %}
+                <span class="post__byline-sep">·</span>
+                <span class="post__byline-location">{{ site.author.location }}</span>
+              {% endif %}
+              {% if page.date %}
+                <span class="post__byline-sep">·</span>
+                <time class="post__byline-date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+              {% endif %}
+              {% if page.read_time %}
+                <span class="post__byline-sep">·</span>
+                <span class="post__byline-readtime">{% include read-time.html %}{% assign words = content | number_of_words %}{{ words | divided_by: 180 | plus: 1 }} min read</span>
+              {% endif %}
+            </div>
+          {% endif %}
         </header>
       {% endunless %}
 
@@ -61,6 +79,30 @@ layout: default
       </footer>
 
       {% if page.share %}{% include social-share.html %}{% endif %}
+
+      {% if page.collection == 'public' %}
+        {% assign post_author = page.author | default: site.author %}
+        <div class="post__author-card">
+          <div class="post__author-card-inner">
+            {% if post_author.avatar %}
+              <img class="post__author-avatar" src="{{ post_author.avatar | relative_url }}" alt="{{ post_author.name | default: post_author }}">
+            {% else %}
+              <div class="post__author-avatar post__author-avatar--placeholder"><i class="fas fa-user"></i></div>
+            {% endif %}
+            <div class="post__author-info">
+              <strong class="post__author-name">{{ post_author.name | default: post_author }}</strong>
+              {% if post_author.bio %}<p class="post__author-bio">{{ post_author.bio }}</p>{% endif %}
+              <div class="post__author-links">
+                {% if site.author.links %}
+                  {% for link in site.author.links %}
+                    {% if link.url %}<a href="{{ link.url }}" rel="nofollow noopener noreferrer"><i class="{{ link.icon }}"></i> {{ link.label }}</a>{% endif %}
+                  {% endfor %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
 
       {% include post_pagination.html %}
     </div>
