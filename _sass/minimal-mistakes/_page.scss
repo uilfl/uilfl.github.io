@@ -346,6 +346,15 @@ body {
     line-height: 1.2;
     letter-spacing: -0.01em;
   }
+
+  // Hide heading permalink anchors
+  .page__content {
+    h1, h2, h3, h4, h5, h6 {
+      .header-link {
+        display: none;
+      }
+    }
+  }
 }
 
 /*
