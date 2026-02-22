@@ -260,6 +260,95 @@ body {
 }
 
 /*
+   Public post — enhanced reading experience
+   ========================================================================== */
+
+.public-post {
+  // Constrain line length for comfortable reading (~70 chars)
+  .page__content {
+    font-size: 1.05em;
+    line-height: 1.85;
+    color: $text-color;
+
+    // Slightly wider breathing room between paragraphs
+    p {
+      margin-bottom: 1.4em;
+    }
+
+    // Headings: clear visual hierarchy with generous spacing
+    h1 { font-size: 1.8em;  margin-top: 2em;   margin-bottom: 0.5em; }
+    h2 { font-size: 1.4em;  margin-top: 1.8em; margin-bottom: 0.4em; }
+    h3 { font-size: 1.15em; margin-top: 1.5em; margin-bottom: 0.35em; }
+
+    h2 {
+      padding-bottom: 0.3em;
+      border-bottom: 2px solid mix($primary-color, $border-color, 30%);
+    }
+
+    // Ordered & unordered lists
+    ul, ol {
+      padding-inline-start: 1.6em;
+      li {
+        margin-bottom: 0.4em;
+        line-height: 1.75;
+      }
+    }
+
+    // Blockquote: left accent bar, muted background
+    blockquote {
+      margin: 1.5em 0;
+      padding: 0.8em 1.2em;
+      border-inline-start: 4px solid $primary-color;
+      background: mix(#fff, $border-color, 60%);
+      border-radius: 0 $border-radius $border-radius 0;
+      font-style: italic;
+      color: $muted-text-color;
+
+      p { margin-bottom: 0; }
+    }
+
+    // Inline code: subtle pill
+    :not(pre) > code {
+      font-size: 0.85em;
+      padding: 0.15em 0.4em;
+      background: mix(#fff, $border-color, 40%);
+      border-radius: 3px;
+    }
+
+    // Code blocks: dark background, comfortable padding
+    pre {
+      margin: 1.5em 0;
+      padding: 1em 1.25em;
+      border-radius: $border-radius;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    // Horizontal rule: subtle divider
+    hr {
+      margin: 2.5em 0;
+      border: none;
+      border-top: 1px solid $border-color;
+    }
+
+    // Images: centred with a soft shadow
+    img {
+      display: block;
+      margin-inline: auto;
+      border-radius: $border-radius;
+      box-shadow: 0 2px 8px rgba(#000, 0.1);
+    }
+  }
+
+  // Title: slightly looser tracking
+  .page__title {
+    font-size: 2em;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+}
+
+/*
    Social sharing
    ========================================================================== */
 
