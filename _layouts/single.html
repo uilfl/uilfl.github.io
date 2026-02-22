@@ -72,13 +72,22 @@ layout: default
         {% if page.link %}<div><a href="{{ page.link }}" class="btn btn--primary">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>{% endif %}
       </section>
 
-      <footer class="page__meta">
-        {% if site.data.ui-text[site.locale].meta_label %}
-          <h4 class="page__meta-title">{{ site.data.ui-text[site.locale].meta_label }}</h4>
+      {% if page.collection == 'public' %}
+        {% comment %}Tags only — no redundant date{% endcomment %}
+        {% if site.tag_archive.type and page.tags[0] or site.category_archive.type and page.categories[0] %}
+          <footer class="page__meta">
+            {% include page__taxonomy.html %}
+          </footer>
         {% endif %}
-        {% include page__taxonomy.html %}
-        {% include page__date.html %}
-      </footer>
+      {% else %}
+        <footer class="page__meta">
+          {% if site.data.ui-text[site.locale].meta_label %}
+            <h4 class="page__meta-title">{{ site.data.ui-text[site.locale].meta_label }}</h4>
+          {% endif %}
+          {% include page__taxonomy.html %}
+          {% include page__date.html %}
+        </footer>
+      {% endif %}
 
       {% if page.share %}{% include social-share.html %}{% endif %}
 
@@ -93,14 +102,15 @@ layout: default
             {% endif %}
             <div class="post__author-info">
               <strong class="post__author-name">{{ post_author.name | default: post_author }}</strong>
-              {% if post_author.bio %}<p class="post__author-bio">{{ post_author.bio }}</p>{% endif %}
-              <div class="post__author-links">
-                {% if site.author.links %}
+              {% if site.author.bio %}<p class="post__author-bio">{{ site.author.bio }}</p>{% endif %}
+              {% if site.author.location %}<p class="post__author-bio">{{ site.author.location }}</p>{% endif %}
+              {% if site.author.links %}
+                <div class="post__author-links">
                   {% for link in site.author.links %}
                     {% if link.url %}<a href="{{ link.url }}" rel="nofollow noopener noreferrer"><i class="{{ link.icon }}"></i> {{ link.label }}</a>{% endif %}
                   {% endfor %}
-                {% endif %}
-              </div>
+                </div>
+              {% endif %}
             </div>
           </div>
         </div>
