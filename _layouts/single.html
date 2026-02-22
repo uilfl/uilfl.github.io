@@ -49,8 +49,10 @@ layout: default
                 <time class="post__byline-date" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
               {% endif %}
               {% if page.read_time %}
+                {% assign words = content | number_of_words %}
+                {% assign minutes = words | divided_by: 180 | plus: 1 %}
                 <span class="post__byline-sep">·</span>
-                <span class="post__byline-readtime">{% include read-time.html %}{% assign words = content | number_of_words %}{{ words | divided_by: 180 | plus: 1 }} min read</span>
+                <span class="post__byline-readtime">{{ minutes }} min read</span>
               {% endif %}
             </div>
           {% endif %}
