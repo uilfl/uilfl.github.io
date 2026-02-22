@@ -35,7 +35,7 @@ layout: default
             <a href="{{ page.url | absolute_url }}" itemprop="url">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</a>
           </h1>
           {%- endif %}
-          {% include page__meta.html %}
+          {% unless page.collection == 'public' %}{% include page__meta.html %}{% endunless %}
           {% if page.collection == 'public' %}
             {% assign post_author = page.author | default: site.author %}
             <div class="post__byline">

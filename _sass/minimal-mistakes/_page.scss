@@ -264,37 +264,57 @@ body {
    ========================================================================== */
 
 .public-post {
-  // Constrain line length for comfortable reading (~70 chars)
+  // Reclaim full width — no sidebar is rendered for public posts
+  @include breakpoint($large) {
+    float: none;
+    width: 100%;
+    padding-inline-end: 0;
+    max-width: 740px;
+    margin-inline: auto;
+  }
+
+  @include breakpoint($x-large) {
+    max-width: 780px;
+  }
+
+  // Title
+  .page__title {
+    font-size: $type-size-1;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.15em;
+
+    a { color: $text-color; text-decoration: none; }
+  }
+
+  // Body content
   .page__content {
     font-size: 1.05em;
     line-height: 1.85;
-    color: $text-color;
 
-    // Slightly wider breathing room between paragraphs
-    p {
-      margin-bottom: 1.4em;
+    p, li, dl { font-size: 1em; }
+
+    p { margin-bottom: 1.4em; }
+
+    // Heading hierarchy
+    h1 { font-size: $h-size-1 * 1.1; margin-top: 2em;   margin-bottom: 0.5em; }
+    h2 { font-size: $h-size-2 * 1.1; margin-top: 1.8em; margin-bottom: 0.4em;
+         padding-bottom: 0.3em;
+         border-bottom: 2px solid mix($primary-color, $border-color, 30%); }
+    h3 { font-size: $h-size-3 * 1.1; margin-top: 1.5em; margin-bottom: 0.35em; }
+
+    // Hide heading permalink anchors
+    h1, h2, h3, h4, h5, h6 {
+      .header-link { display: none; }
     }
 
-    // Headings: clear visual hierarchy with generous spacing
-    h1 { font-size: 1.8em;  margin-top: 2em;   margin-bottom: 0.5em; }
-    h2 { font-size: 1.4em;  margin-top: 1.8em; margin-bottom: 0.4em; }
-    h3 { font-size: 1.15em; margin-top: 1.5em; margin-bottom: 0.35em; }
-
-    h2 {
-      padding-bottom: 0.3em;
-      border-bottom: 2px solid mix($primary-color, $border-color, 30%);
-    }
-
-    // Ordered & unordered lists
+    // Lists
     ul, ol {
       padding-inline-start: 1.6em;
-      li {
-        margin-bottom: 0.4em;
-        line-height: 1.75;
-      }
+      li { margin-bottom: 0.4em; line-height: 1.75; }
     }
 
-    // Blockquote: left accent bar, muted background
+    // Blockquote
     blockquote {
       margin: 1.5em 0;
       padding: 0.8em 1.2em;
@@ -303,11 +323,10 @@ body {
       border-radius: 0 $border-radius $border-radius 0;
       font-style: italic;
       color: $muted-text-color;
-
       p { margin-bottom: 0; }
     }
 
-    // Inline code: subtle pill
+    // Inline code
     :not(pre) > code {
       font-size: 0.85em;
       padding: 0.15em 0.4em;
@@ -315,7 +334,7 @@ body {
       border-radius: 3px;
     }
 
-    // Code blocks: dark background, comfortable padding
+    // Code blocks
     pre {
       margin: 1.5em 0;
       padding: 1em 1.25em;
@@ -324,35 +343,19 @@ body {
       overflow-x: auto;
     }
 
-    // Horizontal rule: subtle divider
+    // Horizontal rule
     hr {
       margin: 2.5em 0;
       border: none;
       border-top: 1px solid $border-color;
     }
 
-    // Images: centred with a soft shadow
+    // Images
     img {
       display: block;
       margin-inline: auto;
       border-radius: $border-radius;
       box-shadow: 0 2px 8px rgba(#000, 0.1);
-    }
-  }
-
-  // Title: slightly looser tracking
-  .page__title {
-    font-size: 2em;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-  }
-
-  // Hide heading permalink anchors
-  .page__content {
-    h1, h2, h3, h4, h5, h6 {
-      .header-link {
-        display: none;
-      }
     }
   }
 }
