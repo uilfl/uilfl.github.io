@@ -4,7 +4,7 @@ import { siteConfig } from '@/config';
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="border-b border-(--color-border) bg-(--color-bg)">
+<header class="sticky top-0 z-50 border-b border-(--color-border) bg-(--color-bg)/95 backdrop-blur-sm">
   <div class="max-w-3xl mx-auto px-4 sm:px-6">
     <div class="flex items-center justify-between h-14">
       <!-- Site title -->
@@ -12,25 +12,114 @@ const currentPath = Astro.url.pathname;
         {siteConfig.title}
       </a>
 
-      <!-- Navigation -->
-      <nav class="flex items-center gap-1">
-        {siteConfig.nav.map((item) => {
-          const isActive = currentPath.startsWith(item.url) || (item.url === '/posts/' && currentPath === '/');
-          return (
-            <a
-              href={item.url}
-              class:list={[
-                'px-3 py-1.5 text-sm rounded-md transition-colors',
-                isActive
-                  ? 'text-(--color-accent) font-medium'
-                  : 'text-(--color-muted) hover:text-(--color-primary)',
-              ]}
-            >
-              {item.title}
-            </a>
-          );
-        })}
-      </nav>
+      <!-- Desktop nav -->
+      <div class="flex items-center gap-1">
+        <nav class="hidden sm:flex items-center gap-1">
+          {siteConfig.nav.map((item) => {
+            const isActive = currentPath.startsWith(item.url);
+            return (
+              <a
+                href={item.url}
+                class:list={[
+                  'px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
+                  isActive
+                    ? 'text-(--color-accent)'
+                    : 'text-(--color-muted) hover:text-(--color-primary)',
+                ]}
+              >
+                {item.title}
+              </a>
+            );
+          })}
+        </nav>
+
+        <!-- Search icon button -->
+        <a
+          href="/search/"
+          class="p-2 rounded-md text-(--color-muted) hover:text-(--color-primary) hover:bg-(--color-surface) transition-colors"
+          title="Search"
+        >
+          <span class="sr-only">Search</span>
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </a>
+
+        <!-- Mobile hamburger button -->
+        <button
+          id="menu-toggle"
+          class="sm:hidden p-2 rounded-md text-(--color-muted) hover:text-(--color-primary) hover:bg-(--color-surface) transition-colors"
+          aria-label="Menu"
+          aria-expanded="false"
+        >
+          <!-- Hamburger icon -->
+          <svg id="icon-menu" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6" />
+            <line x1="4" y1="12" x2="20" y2="12" />
+            <line x1="4" y1="18" x2="20" y2="18" />
+          </svg>
+          <!-- Close icon (hidden by default) -->
+          <svg id="icon-close" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
+
+  <!-- Mobile menu panel -->
+  <div id="mobile-menu" class="hidden sm:hidden border-t border-(--color-border) bg-(--color-bg)">
+    <nav class="max-w-3xl mx-auto px-4 sm:px-6 py-3 flex flex-col gap-1">
+      {siteConfig.nav.map((item) => {
+        const isActive = currentPath.startsWith(item.url);
+        return (
+          <a
+            href={item.url}
+            class:list={[
+              'px-3 py-2 text-sm font-medium rounded-md transition-colors',
+              isActive
+                ? 'text-(--color-accent) bg-(--color-surface)'
+                : 'text-(--color-muted) hover:text-(--color-primary) hover:bg-(--color-surface)',
+            ]}
+          >
+            {item.title}
+          </a>
+        );
+      })}
+      <a
+        href="/search/"
+        class:list={[
+          'px-3 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-2',
+          currentPath.startsWith('/search/')
+            ? 'text-(--color-accent) bg-(--color-surface)'
+            : 'text-(--color-muted) hover:text-(--color-primary) hover:bg-(--color-surface)',
+        ]}
+      >
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        Search
+      </a>
+    </nav>
+  </div>
 </header>
+
+<script is:inline>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const iconMenu = document.getElementById('icon-menu');
+  const iconClose = document.getElementById('icon-close');
+
+  if (toggle && menu && iconMenu && iconClose) {
+    toggle.addEventListener('click', () => {
+      const isOpen = !menu.classList.contains('hidden');
+      menu.classList.toggle('hidden');
+      iconMenu.classList.toggle('hidden');
+      iconClose.classList.toggle('hidden');
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+    });
+  }
+</script>

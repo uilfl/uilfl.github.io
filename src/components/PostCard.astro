@@ -1,30 +1,68 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { getPostSlug, formatDate } from '@/lib/posts';
+import { getPostSlug, formatDate, readingTime } from '@/lib/posts';
 
 interface Props {
   post: CollectionEntry<'public'>;
+  compact?: boolean;
+  body?: string;
 }
 
-const { post } = Astro.props;
+const { post, compact = false, body = '' } = Astro.props;
 const slug = getPostSlug(post);
+const readTime = body ? readingTime(body) : 0;
+
+const shortDate = post.data.date
+  ? post.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  : '';
 ---
 
-<article class="group">
-  <a href={`/${slug}/`} class="block py-4 -mx-2 px-2 rounded-md hover:bg-(--color-surface) transition-colors">
-    <h3 class="text-lg font-semibold text-(--color-primary) group-hover:text-(--color-accent) transition-colors">
-      {post.data.title}
-    </h3>
-    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-sm text-(--color-muted)">
-      {post.data.date && (
-        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+{compact ? (
+  <li class="group">
+    <a href={`/${slug}/`} class="flex items-baseline gap-3 py-2 -mx-2 px-2 rounded-md hover:bg-(--color-surface) transition-colors">
+      <time class="text-sm text-(--color-muted) whitespace-nowrap tabular-nums" datetime={post.data.date?.toISOString()}>
+        {shortDate}
+      </time>
+      <span class="text-(--color-primary) group-hover:text-(--color-accent) transition-colors truncate">
+        {post.data.title}
+      </span>
+    </a>
+  </li>
+) : (
+  <article class="group">
+    <a href={`/${slug}/`} class="block py-4 -mx-2 px-2 rounded-md hover:bg-(--color-surface) transition-colors">
+      <h3 class="text-lg font-semibold text-(--color-primary) group-hover:text-(--color-accent) transition-colors">
+        {post.data.title}
+      </h3>
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-sm text-(--color-muted)">
+        {post.data.date && (
+          <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        )}
+        {readTime > 0 && (
+          <span class="flex items-center gap-1">
+            <span>⏱</span>
+            <span>{readTime} min read</span>
+          </span>
+        )}
+        {post.data.categories.length > 0 && (
+          <span>{post.data.categories.join(', ')}</span>
+        )}
+      </div>
+      {post.data.excerpt && (
+        <p class="mt-2 text-sm text-(--color-muted) line-clamp-2">{post.data.excerpt}</p>
       )}
-      {post.data.categories.length > 0 && (
-        <span>{post.data.categories.join(', ')}</span>
+      {post.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-3">
+          {post.data.tags.map((tag) => (
+            <a
+              href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}/`}
+              class="text-xs px-2 py-1 rounded-md bg-(--color-muted)/10 text-(--color-muted) hover:bg-(--color-accent)/10 hover:text-(--color-accent) transition-colors"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
       )}
-    </div>
-    {post.data.excerpt && (
-      <p class="mt-2 text-sm text-(--color-muted) line-clamp-2">{post.data.excerpt}</p>
-    )}
-  </a>
-</article>
+    </a>
+  </article>
+)}

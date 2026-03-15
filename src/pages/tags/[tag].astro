@@ -1,0 +1,61 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import TagsSidebar from '@/components/TagsSidebar.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate, getUniqueTagsWithCount, getAllTags } from '@/lib/posts';
+
+interface Props {
+  tag: string;
+}
+
+const allPosts = sortByDate(await getCollection('public'));
+const tagsWithCount = getUniqueTagsWithCount(allPosts);
+const tagMap = getAllTags(allPosts);
+
+const tag = Astro.params.tag || '';
+const decodedTag = tag.replace(/-/g, ' ');
+const postsWithTag = sortByDate(tagMap.get(decodedTag) || []);
+
+if (postsWithTag.length === 0) {
+  return Astro.redirect('/tags/');
+}
+
+export async function getStaticPaths() {
+  const allPosts = sortByDate(await getCollection('public'));
+  const tagsWithCount = getUniqueTagsWithCount(allPosts);
+  
+  return tagsWithCount.map(([tag]) => ({
+    params: { tag: tag.toLowerCase().replace(/\s+/g, '-') },
+  }));
+}
+---
+
+<BaseLayout title={`Posts tagged with "${decodedTag}"`}>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Main content -->
+    <div class="md:col-span-2">
+      <h1 class="text-3xl font-bold mb-2">
+        Posts tagged with <span class="text-(--color-accent)">#{decodedTag}</span>
+      </h1>
+      <p class="text-(--color-muted) mb-8">
+        {postsWithTag.length} {postsWithTag.length === 1 ? 'post' : 'posts'}
+      </p>
+
+      {postsWithTag.length > 0 ? (
+        <div class="divide-y divide-(--color-border)">
+          {postsWithTag.map((post) => (
+            <PostCard post={post} body={post.body} />
+          ))}
+        </div>
+      ) : (
+        <p class="text-(--color-muted) text-center py-12">
+          No posts found with this tag.
+        </p>
+      )}
+    </div>
+
+    <!-- Sidebar -->
+    <TagsSidebar tags={tagsWithCount} />
+  </div>
+</BaseLayout>

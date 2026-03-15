@@ -79,3 +79,25 @@ export function getAllTags(posts: CollectionEntry<'public'>[]): Map<string, Coll
   }
   return map;
 }
+
+/**
+ * Get unique tags with their count, sorted by count descending.
+ */
+export function getUniqueTagsWithCount(
+  posts: CollectionEntry<'public'>[]
+): Array<[tag: string, count: number]> {
+  const tagMap = getAllTags(posts);
+  const tagsWithCount = Array.from(tagMap.entries()).map(([tag, posts]) => [tag, posts.length] as const);
+  return tagsWithCount.sort((a, b) => b[1] - a[1]);
+}
+
+/**
+ * Paginate an array into chunks.
+ */
+export function paginate<T>(items: T[], pageSize: number): T[][] {
+  const pages: T[][] = [];
+  for (let i = 0; i < items.length; i += pageSize) {
+    pages.push(items.slice(i, i + pageSize));
+  }
+  return pages;
+}

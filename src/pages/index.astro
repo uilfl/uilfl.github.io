@@ -1,25 +1,82 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import HeroCard from '@/components/HeroCard.astro';
 import PostCard from '@/components/PostCard.astro';
+import EducationCard from '@/components/EducationCard.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import { siteConfig } from '@/config';
 import { getCollection } from 'astro:content';
 import { sortByDate } from '@/lib/posts';
 
 const allPosts = sortByDate(await getCollection('public'));
+const recentPosts = allPosts.slice(0, 5);
+const { author, education, projects } = siteConfig;
 ---
 
 <BaseLayout>
-  <section>
-    <h1 class="text-2xl font-bold mb-1">Recent Posts</h1>
-    <p class="text-sm text-(--color-muted) mb-6">Thoughts, notes, and things I've learned.</p>
+  <!-- Hero -->
+  <HeroCard />
 
-    {allPosts.length === 0 ? (
-      <p class="text-(--color-muted) py-8">No posts yet.</p>
+  <!-- About -->
+  <section class="mt-10">
+    <h2 class="text-lg font-bold text-(--color-primary) mb-3">About</h2>
+    <p class="text-sm text-(--color-muted) leading-relaxed">{author.tagline}</p>
+    <p class="text-sm text-(--color-muted) leading-relaxed mt-2">{author.bio}</p>
+    <a href="/about/" class="inline-block mt-3 text-sm text-(--color-accent) hover:underline">
+      More about me &rarr;
+    </a>
+  </section>
+
+  <!-- Posts -->
+  <section class="mt-10">
+    <h2 class="text-lg font-bold text-(--color-primary) mb-3">Posts</h2>
+    {recentPosts.length === 0 ? (
+      <p class="text-sm text-(--color-muted) py-4">No posts yet.</p>
     ) : (
-      <div class="divide-y divide-(--color-border)">
-        {allPosts.map((post) => (
-          <PostCard post={post} />
+      <ul class="space-y-0.5">
+        {recentPosts.map((post) => (
+          <PostCard post={post} compact />
         ))}
-      </div>
+      </ul>
+    )}
+    {allPosts.length > 5 && (
+      <a href="/blog/" class="inline-block mt-3 text-sm text-(--color-accent) hover:underline">
+        More posts &rarr;
+      </a>
     )}
   </section>
+
+  <!-- Education -->
+  {education.length > 0 && (
+    <section class="mt-10">
+      <h2 class="text-lg font-bold text-(--color-primary) mb-3">Education</h2>
+      <div class="space-y-3">
+        {education.map((item) => (
+          <EducationCard
+            title={item.title}
+            description={item.description}
+            period={item.period}
+            url={item.url || undefined}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Projects -->
+  {projects.length > 0 && (
+    <section class="mt-10">
+      <h2 class="text-lg font-bold text-(--color-primary) mb-3">Projects</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {projects.map((project) => (
+          <ProjectCard
+            title={project.title}
+            description={project.description}
+            url={project.url}
+            image={project.image || undefined}
+          />
+        ))}
+      </div>
+    </section>
+  )}
 </BaseLayout>

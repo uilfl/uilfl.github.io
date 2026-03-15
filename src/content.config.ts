@@ -4,9 +4,12 @@ import { glob } from 'astro/loaders';
 const postSchema = z.object({
   title: z.string(),
   date: z.coerce.date().optional(),
+  updatedDate: z.coerce.date().optional(),
   categories: z.array(z.string()).default([]),
   tags: z.array(z.string()).default([]),
   excerpt: z.string().optional(),
+  featured: z.boolean().default(false),
+  draft: z.boolean().default(false),
 });
 
 const publicCollection = defineCollection({

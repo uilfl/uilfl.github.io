@@ -1,0 +1,49 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+// Filter headings to only include h2 and h3
+const filteredHeadings = headings.filter(
+  (heading) => heading.depth === 2 || heading.depth === 3
+);
+
+if (filteredHeadings.length === 0) {
+  return null;
+}
+
+const getIndentClass = (depth: number) => {
+  return depth === 3 ? 'ml-4' : '';
+};
+
+const slugify = (text: string) => {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/--+/g, '-');
+};
+---
+
+<nav class="sticky top-6 max-h-[calc(100vh-2rem)] overflow-auto rounded-lg border border-(--color-border) p-4 bg-(--color-surface)">
+  <h3 class="text-sm font-semibold uppercase tracking-wide text-(--color-muted) mb-4">
+    On this page
+  </h3>
+
+  <ul class="space-y-2 text-sm">
+    {filteredHeadings.map((heading) => (
+      <li class={getIndentClass(heading.depth)}>
+        <a
+          href={`#${heading.slug}`}
+          class="text-(--color-muted) hover:text-(--color-accent) transition-colors block py-1 truncate"
+        >
+          {heading.text}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

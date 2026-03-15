@@ -1,0 +1,54 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import Paginator from '@/components/Paginator.astro';
+import TagsSidebar from '@/components/TagsSidebar.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate, getUniqueTagsWithCount, paginate } from '@/lib/posts';
+
+const POSTS_PER_PAGE = 8;
+
+const allPosts = sortByDate(await getCollection('public'));
+const tagsWithCount = getUniqueTagsWithCount(allPosts);
+
+// Paginate posts
+const paginatedPosts = paginate(allPosts, POSTS_PER_PAGE);
+const currentPage = 1;
+const totalPages = paginatedPosts.length;
+const postsOnPage = paginatedPosts[currentPage - 1] || [];
+---
+
+<BaseLayout title="Blog">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Main content -->
+    <div class="md:col-span-2">
+      <h1 class="text-3xl font-bold mb-2">Blog</h1>
+      <p class="text-(--color-muted) mb-8">
+        {allPosts.length} posts
+      </p>
+
+      {postsOnPage.length > 0 ? (
+        <>
+          <div class="divide-y divide-(--color-border)">
+            {postsOnPage.map((post) => (
+              <PostCard post={post} body={post.body} />
+            ))}
+          </div>
+
+          <Paginator
+            currentPage={currentPage}
+            totalPages={totalPages}
+            baseUrl="/blog/"
+          />
+        </>
+      ) : (
+        <p class="text-(--color-muted) text-center py-12">
+          No posts found.
+        </p>
+      )}
+    </div>
+
+    <!-- Sidebar -->
+    <TagsSidebar tags={tagsWithCount} />
+  </div>
+</BaseLayout>

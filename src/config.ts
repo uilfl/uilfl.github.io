@@ -5,7 +5,8 @@ export const siteConfig = {
   locale: 'en-US',
   author: {
     name: 'Yusheng Chen',
-    bio: 'A brief description about yourself',
+    tagline: 'Developer',
+    bio: 'A developer who works across multiple cities — Taipei, Shanghai, and Tokyo. Blending different cultural and technological approaches in work and life.',
     location: 'Taipei, Shanghai and Tokyo',
     avatar: '',
     links: [
@@ -14,10 +15,35 @@ export const siteConfig = {
     ],
   },
   nav: [
-    { title: 'Posts', url: '/posts/' },
-    { title: 'Categories', url: '/categories/' },
-    { title: 'Tags', url: '/tags/' },
-    { title: 'Search', url: '/search/' },
+    { title: 'Blog', url: '/blog/' },
     { title: 'About', url: '/about/' },
+  ],
+  education: [
+    {
+      title: 'University Name',
+      description: 'Bachelor of Computer Science',
+      period: 'Sep 2018 - Jun 2022',
+      url: '',
+    },
+  ],
+  projects: [
+    {
+      title: 'Project Alpha',
+      description: 'A full-stack web application built with modern technologies.',
+      url: 'https://github.com/uilfl',
+      image: '',
+    },
+    {
+      title: 'Project Beta',
+      description: 'An open-source CLI tool for developer productivity.',
+      url: 'https://github.com/uilfl',
+      image: '',
+    },
+    {
+      title: 'Project Gamma',
+      description: 'A cross-platform mobile app for daily task management.',
+      url: 'https://github.com/uilfl',
+      image: '',
+    },
   ],
 } as const;
