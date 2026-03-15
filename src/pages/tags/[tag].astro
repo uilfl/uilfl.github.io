@@ -32,28 +32,31 @@ export async function getStaticPaths() {
 ---
 
 <BaseLayout title={`Posts tagged with "${decodedTag}"`}>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+  <div id="content-header">
+    <h1 class="mb-6 mt-6 text-3xl font-medium sm:mt-10">
+      Posts tagged with <span class="text-(--color-accent)">#{decodedTag}</span>
+    </h1>
+  </div>
+
+  <div class="grid gap-y-16 sm:grid-cols-[3fr_1fr] sm:gap-x-8">
     <!-- Main content -->
-    <div class="md:col-span-2">
-      <h1 class="text-3xl font-bold mb-2">
-        Posts tagged with <span class="text-(--color-accent)">#{decodedTag}</span>
-      </h1>
-      <p class="text-(--color-muted) mb-8">
+    <section aria-label="Blog posts list" id="content">
+      <p class="text-(--color-muted) mb-5 text-sm">
         {postsWithTag.length} {postsWithTag.length === 1 ? 'post' : 'posts'}
       </p>
 
       {postsWithTag.length > 0 ? (
-        <div class="divide-y divide-(--color-border)">
+        <ul class="flex flex-col gap-y-4 text-start">
           {postsWithTag.map((post) => (
             <PostCard post={post} body={post.body} />
           ))}
-        </div>
+        </ul>
       ) : (
         <p class="text-(--color-muted) text-center py-12">
           No posts found with this tag.
         </p>
       )}
-    </div>
+    </section>
 
     <!-- Sidebar -->
     <TagsSidebar tags={tagsWithCount} />

@@ -92,6 +92,22 @@ export function getUniqueTagsWithCount(
 }
 
 /**
+ * Group posts by year, sorted descending (newest year first).
+ */
+export function getPostsByYear(
+  posts: CollectionEntry<'public'>[]
+): Array<[year: number, posts: CollectionEntry<'public'>[]]> {
+  const yearMap = new Map<number, CollectionEntry<'public'>[]>();
+  for (const post of posts) {
+    const year = post.data.date?.getFullYear() ?? 0;
+    const existing = yearMap.get(year) ?? [];
+    existing.push(post);
+    yearMap.set(year, existing);
+  }
+  return Array.from(yearMap.entries()).sort((a, b) => b[0] - a[0]);
+}
+
+/**
  * Paginate an array into chunks.
  */
 export function paginate<T>(items: T[], pageSize: number): T[][] {

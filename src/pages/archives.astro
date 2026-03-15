@@ -1,0 +1,108 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate, getPostsByYear, getPostSlug } from '@/lib/posts';
+
+const allPosts = sortByDate(await getCollection('public'));
+const postsByYear = getPostsByYear(allPosts);
+---
+
+<BaseLayout title="Archives">
+  {/* Back button */}
+  <a
+    class="group inline-flex items-center gap-x-1 rounded-lg bg-(--color-surface) border border-(--color-border) px-2 py-1 text-sm text-(--color-muted) transition-all hover:bg-(--color-bg) hover:text-(--color-accent) no-underline"
+    href="/blog/"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16" height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="stroke-(--color-muted) group-hover:stroke-(--color-accent)"
+    >
+      <line
+        x1="19" y1="12" x2="5" y2="12"
+        class="translate-x-3 scale-x-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:scale-x-100"
+      />
+      <polyline
+        points="12 19 5 12 12 5"
+        class="translate-x-1 transition-all duration-300 ease-in-out group-hover:translate-x-0"
+      />
+    </svg>
+    <p class="my-0">Back</p>
+  </a>
+
+  <main class="mt-6 lg:mt-10">
+    <div id="content-header">
+      <h1 class="mb-6 text-3xl font-medium">Archives</h1>
+    </div>
+
+    <section id="content" aria-label="Blog post list">
+      {postsByYear.map(([year, posts]) => (
+        <div class="relative mt-20">
+          <h2
+            class="absolute -start-6 -top-16 z-0 text-9xl font-bold text-transparent opacity-12"
+            style={`-webkit-text-stroke-width:2px;-webkit-text-stroke-color:var(--color-primary)`}
+          >
+            <samp>{year}</samp>
+          </h2>
+
+          <p class="px-5 text-(--color-muted)">
+            {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+          </p>
+
+          <ul class="flex flex-col text-start">
+            {posts.map((post) => {
+              const slug = getPostSlug(post);
+              const shortDate = post.data.date
+                ? post.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : '';
+              return (
+                <li class="border-0 bg-transparent py-2">
+                  <a
+                    class="block w-full relative group rounded-2xl border border-(--color-border) bg-(--color-bg) transition-colors ease-in-out px-5 py-2.5 hover:bg-(--color-surface) hover:text-(--color-accent) no-underline"
+                    href={`/${slug}/`}
+                  >
+                    <div class="relative flex flex-col gap-1 sm:flex-row sm:items-center" style="z-index:1">
+                      <span class="text-(--color-muted) font-mono min-w-[95px] text-xs">
+                        <time datetime={post.data.date?.toISOString()}>
+                          {shortDate}
+                        </time>
+                      </span>
+
+                      <div class="flex justify-between flex-grow">
+                        <div>{post.data.title}</div>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16" height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="preview-redirect my-1 stroke-(--color-muted) group-hover:stroke-(--color-accent) transition-all duration-300"
+                        >
+                          <line
+                            x1="5" y1="12" x2="19" y2="12"
+                            class="translate-x-4 scale-x-0 transition-all duration-300 ease-in-out group-hover:translate-x-1 group-hover:scale-x-100"
+                          />
+                          <polyline
+                            points="12 5 19 12 12 19"
+                            class="translate-x-0 transition-all duration-300 ease-in-out group-hover:translate-x-1"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </section>
+  </main>
+</BaseLayout>

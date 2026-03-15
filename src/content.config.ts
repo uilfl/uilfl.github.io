@@ -10,6 +10,11 @@ const postSchema = z.object({
   excerpt: z.string().optional(),
   featured: z.boolean().default(false),
   draft: z.boolean().default(false),
+  heroImage: z.object({
+    src: z.string(),
+    alt: z.string().optional(),
+    color: z.string().optional(),
+  }).optional(),
 });
 
 const publicCollection = defineCollection({

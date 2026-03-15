@@ -6,12 +6,11 @@ import TagsSidebar from '@/components/TagsSidebar.astro';
 import { getCollection } from 'astro:content';
 import { sortByDate, getUniqueTagsWithCount, paginate } from '@/lib/posts';
 
-const POSTS_PER_PAGE = 8;
+const POSTS_PER_PAGE = 6;
 
 const allPosts = sortByDate(await getCollection('public'));
 const tagsWithCount = getUniqueTagsWithCount(allPosts);
 
-// Paginate posts
 const paginatedPosts = paginate(allPosts, POSTS_PER_PAGE);
 const currentPage = 1;
 const totalPages = paginatedPosts.length;
@@ -19,21 +18,29 @@ const postsOnPage = paginatedPosts[currentPage - 1] || [];
 ---
 
 <BaseLayout title="Blog">
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+  <div id="content-header">
+    <h1 class="mb-6 mt-6 text-3xl font-medium sm:mt-10">Blog</h1>
+  </div>
+
+  <div class="grid gap-y-16 sm:grid-cols-[3fr_1fr] sm:gap-x-8">
     <!-- Main content -->
-    <div class="md:col-span-2">
-      <h1 class="text-3xl font-bold mb-2">Blog</h1>
-      <p class="text-(--color-muted) mb-8">
-        {allPosts.length} posts
-      </p>
+    <section aria-label="Blog posts list" id="content">
+      <div class="mb-3 flex flex-col justify-between text-sm sm:mb-5 sm:flex-row">
+        <span class="text-(--color-muted)">
+          Page {currentPage} - Showing {postsOnPage.length} of {allPosts.length} posts
+        </span>
+        <a aria-label="View all blog posts by year" href="/archives/" class="text-(--color-accent) hover:underline">
+          View all posts by year &rarr;
+        </a>
+      </div>
 
       {postsOnPage.length > 0 ? (
         <>
-          <div class="divide-y divide-(--color-border)">
+          <ul class="flex flex-col gap-y-4 text-start">
             {postsOnPage.map((post) => (
               <PostCard post={post} body={post.body} />
             ))}
-          </div>
+          </ul>
 
           <Paginator
             currentPage={currentPage}
@@ -46,7 +53,7 @@ const postsOnPage = paginatedPosts[currentPage - 1] || [];
           No posts found.
         </p>
       )}
-    </div>
+    </section>
 
     <!-- Sidebar -->
     <TagsSidebar tags={tagsWithCount} />
