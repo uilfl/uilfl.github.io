@@ -1,12 +1,18 @@
-# Jekyll generated files
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
+# Astro build output
+dist/
+.astro/
 
-# Ruby environment
-.bundle/
-vendor/bundle
+# Node
+node_modules/
+
+# Draft pipeline — only src/content/public/ is tracked
+src/content/drafts/
+src/content/posts/
+publish_draft.sh
+
+# Legacy Jekyll local draft folders
+_drafts/
+_posts/
 
 # OS generated files
 .DS_Store
@@ -16,6 +22,7 @@ vendor/bundle
 .Trashes
 ehthumbs.db
 Thumbs.db
-publish_draft.sh
-drafts/
-_drafts/
+
+# Environment
+.env
+.env.*

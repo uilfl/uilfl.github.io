@@ -1,0 +1,46 @@
+---
+import { siteConfig } from '@/config';
+
+const { author } = siteConfig;
+
+interface Props {
+  class?: string;
+}
+
+const className = Astro.props.class ?? '';
+---
+
+<aside class:list={['flex items-start gap-4 p-5 rounded-lg bg-(--color-surface)', className]}>
+  {author.avatar ? (
+    <img
+      src={author.avatar}
+      alt={author.name}
+      class="w-16 h-16 rounded-full flex-shrink-0 object-cover"
+    />
+  ) : (
+    <div class="w-16 h-16 rounded-full flex-shrink-0 bg-(--color-border) flex items-center justify-center text-2xl font-bold text-(--color-muted)">
+      {author.name.charAt(0)}
+    </div>
+  )}
+  <div class="min-w-0">
+    <p class="font-semibold text-(--color-primary)">{author.name}</p>
+    <p class="text-sm text-(--color-muted) mt-0.5">{author.bio}</p>
+    {author.location && (
+      <p class="text-xs text-(--color-muted) mt-1">{author.location}</p>
+    )}
+    {author.links.length > 0 && (
+      <div class="flex gap-3 mt-2">
+        {author.links.map((link) => (
+          <a
+            href={link.url}
+            class="text-sm text-(--color-accent) hover:underline"
+            target={link.url.startsWith('mailto:') ? undefined : '_blank'}
+            rel={link.url.startsWith('mailto:') ? undefined : 'noopener'}
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</aside>

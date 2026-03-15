@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Search">
+  <h1 class="text-2xl font-bold mb-6">Search</h1>
+  <div id="search" data-pagefind-ignore></div>
+
+  <!-- Pagefind UI assets are generated at build time into /pagefind/ -->
+  <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+  <script is:inline src="/pagefind/pagefind-ui.js"></script>
+  <script is:inline>
+    window.addEventListener('DOMContentLoaded', () => {
+      new PagefindUI({
+        element: '#search',
+        showSubResults: true,
+        showImages: false,
+      });
+    });
+  </script>
+
+  <style is:global>
+    /* Minimal Pagefind UI overrides to match site theme */
+    .pagefind-ui__search-input {
+      font-family: var(--font-sans) !important;
+      border-color: var(--color-border) !important;
+      border-radius: 0.5rem !important;
+    }
+    .pagefind-ui__search-input:focus {
+      border-color: var(--color-accent) !important;
+      outline: none !important;
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent) 20%, transparent) !important;
+    }
+    .pagefind-ui__result-link {
+      color: var(--color-accent) !important;
+    }
+  </style>
+</BaseLayout>

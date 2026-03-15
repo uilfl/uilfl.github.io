@@ -1,0 +1,33 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate } from '@/lib/posts';
+
+const allPosts = sortByDate(await getCollection('public'));
+
+// Group posts by year
+const postsByYear = new Map<number, typeof allPosts>();
+for (const post of allPosts) {
+  const year = post.data.date?.getFullYear() ?? 0;
+  const group = postsByYear.get(year) ?? [];
+  group.push(post);
+  postsByYear.set(year, group);
+}
+const sortedYears = [...postsByYear.keys()].sort((a, b) => b - a);
+---
+
+<BaseLayout title="Posts by Year">
+  <h1 class="text-2xl font-bold mb-6">Posts by Year</h1>
+
+  {sortedYears.map((year) => (
+    <section class="mb-8">
+      <h2 class="text-lg font-semibold text-(--color-muted) mb-2">{year}</h2>
+      <div class="divide-y divide-(--color-border)">
+        {postsByYear.get(year)!.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    </section>
+  ))}
+</BaseLayout>

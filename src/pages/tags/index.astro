@@ -1,0 +1,25 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getAllTags, sortByDate } from '@/lib/posts';
+
+const allPosts = sortByDate(await getCollection('public'));
+const tags = getAllTags(allPosts);
+const sortedTags = [...tags.entries()].sort((a, b) => b[1].length - a[1].length);
+---
+
+<BaseLayout title="Posts by Tag">
+  <h1 class="text-2xl font-bold mb-6">Posts by Tag</h1>
+
+  <div class="flex flex-wrap gap-2">
+    {sortedTags.map(([tag, posts]) => (
+      <a
+        href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}/`}
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-(--color-border) text-sm text-(--color-muted) hover:text-(--color-accent) hover:border-(--color-accent) transition-colors"
+      >
+        #{tag}
+        <span class="text-xs">({posts.length})</span>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

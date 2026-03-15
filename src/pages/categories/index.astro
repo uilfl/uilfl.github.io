@@ -1,0 +1,39 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getAllCategories, sortByDate, getPostSlug } from '@/lib/posts';
+
+const allPosts = sortByDate(await getCollection('public'));
+const categories = getAllCategories(allPosts);
+const sortedCategories = [...categories.entries()].sort((a, b) => b[1].length - a[1].length);
+---
+
+<BaseLayout title="Posts by Category">
+  <h1 class="text-2xl font-bold mb-6">Posts by Category</h1>
+
+  {sortedCategories.map(([category, posts]) => (
+    <section class="mb-8">
+      <h2 class="text-lg font-semibold mb-2">
+        <a
+          href={`/categories/${category.toLowerCase().replace(/\s+/g, '-')}/`}
+          class="text-(--color-primary) hover:text-(--color-accent) transition-colors"
+        >
+          {category}
+        </a>
+        <span class="text-sm font-normal text-(--color-muted) ml-2">({posts.length})</span>
+      </h2>
+      <ul class="space-y-1">
+        {posts.map((post) => (
+          <li>
+            <a
+              href={`/${getPostSlug(post)}/`}
+              class="text-sm text-(--color-muted) hover:text-(--color-accent) transition-colors"
+            >
+              {post.data.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</BaseLayout>
