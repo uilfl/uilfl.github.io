@@ -1,0 +1,36 @@
+---
+import { siteConfig } from '@/config';
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="border-b border-(--color-border) bg-(--color-bg)">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-14">
+      <!-- Site title -->
+      <a href="/" class="text-lg font-bold text-(--color-primary) hover:text-(--color-accent) transition-colors">
+        {siteConfig.title}
+      </a>
+
+      <!-- Navigation -->
+      <nav class="flex items-center gap-1">
+        {siteConfig.nav.map((item) => {
+          const isActive = currentPath.startsWith(item.url) || (item.url === '/posts/' && currentPath === '/');
+          return (
+            <a
+              href={item.url}
+              class:list={[
+                'px-3 py-1.5 text-sm rounded-md transition-colors',
+                isActive
+                  ? 'text-(--color-accent) font-medium'
+                  : 'text-(--color-muted) hover:text-(--color-primary)',
+              ]}
+            >
+              {item.title}
+            </a>
+          );
+        })}
+      </nav>
+    </div>
+  </div>
+</header>

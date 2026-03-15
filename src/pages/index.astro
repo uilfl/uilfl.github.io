@@ -1,0 +1,25 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate } from '@/lib/posts';
+
+const allPosts = sortByDate(await getCollection('public'));
+---
+
+<BaseLayout>
+  <section>
+    <h1 class="text-2xl font-bold mb-1">Recent Posts</h1>
+    <p class="text-sm text-(--color-muted) mb-6">Thoughts, notes, and things I've learned.</p>
+
+    {allPosts.length === 0 ? (
+      <p class="text-(--color-muted) py-8">No posts yet.</p>
+    ) : (
+      <div class="divide-y divide-(--color-border)">
+        {allPosts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    )}
+  </section>
+</BaseLayout>

@@ -1,0 +1,24 @@
+{
+  "name": "uilfl.github.io",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && npx pagefind --site dist",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^5.0.0",
+    "@astrojs/rss": "^4.0.17",
+    "@astrojs/sitemap": "^3.7.1",
+    "@tailwindcss/vite": "^4.2.1",
+    "astro": "^6.0.4",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "pagefind": "^1.4.0"
+  }
+}
