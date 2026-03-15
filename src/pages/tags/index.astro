@@ -1,25 +1,39 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import { getAllTags, sortByDate } from '@/lib/posts';
+import { sortByDate, getUniqueTagsWithCount } from '@/lib/posts';
 
 const allPosts = sortByDate(await getCollection('public'));
-const tags = getAllTags(allPosts);
-const sortedTags = [...tags.entries()].sort((a, b) => b[1].length - a[1].length);
+const tagsWithCount = getUniqueTagsWithCount(allPosts);
 ---
 
-<BaseLayout title="Posts by Tag">
-  <h1 class="text-2xl font-bold mb-6">Posts by Tag</h1>
+<BaseLayout title="All Tags">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">All Tags</h1>
+    <p class="text-(--color-muted) mb-8">
+      Browse all {tagsWithCount.length} tags
+    </p>
 
-  <div class="flex flex-wrap gap-2">
-    {sortedTags.map(([tag, posts]) => (
-      <a
-        href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}/`}
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-(--color-border) text-sm text-(--color-muted) hover:text-(--color-accent) hover:border-(--color-accent) transition-colors"
-      >
-        #{tag}
-        <span class="text-xs">({posts.length})</span>
-      </a>
-    ))}
+    {tagsWithCount.length > 0 ? (
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {tagsWithCount.map(([tag, count]) => (
+          <a
+            href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}/`}
+            class="group flex items-center justify-between gap-3 px-4 py-3 rounded-lg border border-(--color-border) hover:border-(--color-accent) hover:bg-(--color-surface) transition-colors"
+          >
+            <span class="text-(--color-primary) group-hover:text-(--color-accent)">
+              {tag}
+            </span>
+            <span class="text-xs text-(--color-muted) bg-(--color-muted)/10 px-2 py-0.5 rounded group-hover:bg-(--color-accent)/10 group-hover:text-(--color-accent)">
+              {count}
+            </span>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="text-(--color-muted) text-center py-12">
+        No tags found.
+      </p>
+    )}
   </div>
 </BaseLayout>

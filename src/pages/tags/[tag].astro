@@ -1,0 +1,64 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import TagsSidebar from '@/components/TagsSidebar.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate, getUniqueTagsWithCount, getAllTags } from '@/lib/posts';
+
+interface Props {
+  tag: string;
+}
+
+const allPosts = sortByDate(await getCollection('public'));
+const tagsWithCount = getUniqueTagsWithCount(allPosts);
+const tagMap = getAllTags(allPosts);
+
+const tag = Astro.params.tag || '';
+const decodedTag = tag.replace(/-/g, ' ');
+const postsWithTag = sortByDate(tagMap.get(decodedTag) || []);
+
+if (postsWithTag.length === 0) {
+  return Astro.redirect('/tags/');
+}
+
+export async function getStaticPaths() {
+  const allPosts = sortByDate(await getCollection('public'));
+  const tagsWithCount = getUniqueTagsWithCount(allPosts);
+  
+  return tagsWithCount.map(([tag]) => ({
+    params: { tag: tag.toLowerCase().replace(/\s+/g, '-') },
+  }));
+}
+---
+
+<BaseLayout title={`Posts tagged with "${decodedTag}"`}>
+  <div id="content-header">
+    <h1 class="mb-6 mt-6 text-3xl font-medium sm:mt-10">
+      Posts tagged with <span class="text-(--color-accent)">#{decodedTag}</span>
+    </h1>
+  </div>
+
+  <div class="grid gap-y-16 sm:grid-cols-[3fr_1fr] sm:gap-x-8">
+    <!-- Main content -->
+    <section aria-label="Blog posts list" id="content">
+      <p class="text-(--color-muted) mb-5 text-sm">
+        {postsWithTag.length} {postsWithTag.length === 1 ? 'post' : 'posts'}
+      </p>
+
+      {postsWithTag.length > 0 ? (
+        <ul class="flex flex-col gap-y-4 text-start">
+          {postsWithTag.map((post) => (
+            <PostCard post={post} body={post.body} />
+          ))}
+        </ul>
+      ) : (
+        <p class="text-(--color-muted) text-center py-12">
+          No posts found with this tag.
+        </p>
+      )}
+    </section>
+
+    <!-- Sidebar -->
+    <TagsSidebar tags={tagsWithCount} />
+  </div>
+</BaseLayout>

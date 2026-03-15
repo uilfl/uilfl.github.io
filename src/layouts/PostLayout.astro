@@ -1,8 +1,10 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
+import TableOfContents from '@/components/TableOfContents.astro';
 import { formatDate, readingTime } from '@/lib/posts';
 import { siteConfig } from '@/config';
+import type { MarkdownHeading } from 'astro';
 
 interface Props {
   title: string;
@@ -10,9 +12,10 @@ interface Props {
   categories?: string[];
   tags?: string[];
   rawContent?: string;
+  headings?: MarkdownHeading[];
 }
 
-const { title, date, categories = [], tags = [], rawContent = '' } = Astro.props;
+const { title, date, categories = [], tags = [], rawContent = '', headings = [] } = Astro.props;
 const minutes = readingTime(rawContent);
 ---
 
@@ -23,54 +26,61 @@ const minutes = readingTime(rawContent);
     tags,
   }}
 >
-  <article class="public-post">
-    <!-- Header -->
-    <header class="mb-8">
-      <h1 class="text-3xl sm:text-4xl font-bold leading-tight mb-3">{title}</h1>
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-(--color-muted)">
-        <span>{siteConfig.author.name}</span>
-        {siteConfig.author.location && (
-          <span>{siteConfig.author.location}</span>
-        )}
-        {date && <time datetime={date.toISOString()}>{formatDate(date)}</time>}
-        <span>{minutes} min read</span>
-      </div>
-      {categories.length > 0 && (
-        <div class="flex flex-wrap gap-2 mt-3">
-          {categories.map((cat) => (
-            <a
-              href={`/categories/${cat.toLowerCase().replace(/\s+/g, '-')}/`}
-              class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-(--color-surface) text-(--color-accent) hover:underline"
-            >
-              {cat}
-            </a>
-          ))}
-        </div>
-      )}
-    </header>
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <!-- Main content -->
+    <div class="md:col-span-3">
+      <article class="public-post">
+        <!-- Header -->
+        <header class="mb-8">
+          <h1 class="text-3xl sm:text-4xl font-bold leading-tight mb-3">{title}</h1>
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-(--color-muted)">
+            <span>{siteConfig.author.name}</span>
+            {siteConfig.author.location && (
+              <span>{siteConfig.author.location}</span>
+            )}
+            {date && <time datetime={date.toISOString()}>{formatDate(date)}</time>}
+            <span>{minutes} min read</span>
+          </div>
+          {categories.length > 0 && (
+            <div class="flex flex-wrap gap-2 mt-3">
+              {categories.map((cat) => (
+                <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-(--color-surface) text-(--color-accent)">
+                  {cat}
+                </span>
+              ))}
+            </div>
+          )}
+        </header>
 
-    <!-- Content -->
-    <div class="prose">
-      <slot />
+        <!-- Content -->
+        <div class="prose">
+          <slot />
+        </div>
+
+        <!-- Footer: tags -->
+        {tags.length > 0 && (
+          <footer class="mt-10 pt-6 border-t border-(--color-border)">
+            <div class="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <a
+                  href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}/`}
+                  class="text-xs px-2.5 py-0.5 rounded-full border border-(--color-border) text-(--color-muted) hover:bg-(--color-accent)/10 hover:text-(--color-accent) transition-colors"
+                >
+                  #{tag}
+                </a>
+              ))}
+            </div>
+          </footer>
+        )}
+
+        <!-- Author card -->
+        <AuthorCard class="mt-10" />
+      </article>
     </div>
 
-    <!-- Footer: tags -->
-    {tags.length > 0 && (
-      <footer class="mt-10 pt-6 border-t border-(--color-border)">
-        <div class="flex flex-wrap gap-2">
-          {tags.map((tag) => (
-            <a
-              href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}/`}
-              class="text-xs px-2.5 py-0.5 rounded-full border border-(--color-border) text-(--color-muted) hover:text-(--color-accent) hover:border-(--color-accent) transition-colors"
-            >
-              #{tag}
-            </a>
-          ))}
-        </div>
-      </footer>
-    )}
-
-    <!-- Author card -->
-    <AuthorCard class="mt-10" />
-  </article>
+    <!-- Sidebar: TOC -->
+    <div class="md:col-span-1">
+      <TableOfContents headings={headings} />
+    </div>
+  </div>
 </BaseLayout>

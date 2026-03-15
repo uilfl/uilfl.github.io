@@ -3,8 +3,14 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Search">
-  <h1 class="text-2xl font-bold mb-6">Search</h1>
-  <div id="search" data-pagefind-ignore></div>
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">Search</h1>
+    <p class="text-(--color-muted) mb-8">
+      Find posts, pages, and content across the site.
+    </p>
+    
+    <div id="search" data-pagefind-ignore></div>
+  </div>
 
   <!-- Pagefind UI assets are generated at build time into /pagefind/ -->
   <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
@@ -13,6 +19,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     window.addEventListener('DOMContentLoaded', () => {
       new PagefindUI({
         element: '#search',
+        baseUrl: window.location.origin,
         showSubResults: true,
         showImages: false,
       });
@@ -20,19 +27,88 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   </script>
 
   <style is:global>
-    /* Minimal Pagefind UI overrides to match site theme */
+    /* Pagefind UI theme customization */
+    #search {
+      --pagefind-ui-scale: 1;
+      --pagefind-ui-primary: hsl(var(--color-accent));
+      --pagefind-ui-text: hsl(var(--color-primary));
+      --pagefind-ui-background: hsl(var(--color-bg));
+      --pagefind-ui-border: hsl(var(--color-border));
+      --pagefind-ui-border-width: 1px;
+      --pagefind-ui-border-radius: 0.5rem;
+    }
+
     .pagefind-ui__search-input {
-      font-family: var(--font-sans) !important;
-      border-color: var(--color-border) !important;
-      border-radius: 0.5rem !important;
+      font-family: inherit !important;
+      font-size: 1rem;
+      color: hsl(var(--color-primary)) !important;
+      background: hsl(var(--color-surface)) !important;
+      border: 2px solid hsl(var(--color-border)) !important;
     }
+
     .pagefind-ui__search-input:focus {
-      border-color: var(--color-accent) !important;
+      border-color: hsl(var(--color-accent)) !important;
       outline: none !important;
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent) 20%, transparent) !important;
+      box-shadow: 0 0 0 3px color-mix(in srgb, hsl(var(--color-accent)) 20%, transparent) !important;
     }
+
+    .pagefind-ui__search-input::placeholder {
+      color: hsl(var(--color-muted)) !important;
+    }
+
+    .pagefind-ui__results {
+      margin-top: 2rem;
+    }
+
+    .pagefind-ui__result {
+      padding: 1rem;
+      border: 1px solid hsl(var(--color-border)) !important;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      background: hsl(var(--color-surface)) !important;
+      transition: all 0.2s ease;
+    }
+
+    .pagefind-ui__result:hover {
+      border-color: hsl(var(--color-accent)) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
     .pagefind-ui__result-link {
-      color: var(--color-accent) !important;
+      color: hsl(var(--color-accent)) !important;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .pagefind-ui__result-link:hover {
+      text-decoration: underline;
+    }
+
+    .pagefind-ui__result-title {
+      margin-bottom: 0.5rem;
+    }
+
+    .pagefind-ui__result-excerpt {
+      color: hsl(var(--color-muted)) !important;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .pagefind-ui__message {
+      color: hsl(var(--color-muted)) !important;
+      font-style: italic;
+    }
+
+    .pagefind-ui__loading {
+      color: hsl(var(--color-muted)) !important;
+    }
+
+    mark {
+      background: color-mix(in srgb, hsl(var(--color-accent)) 30%, transparent);
+      padding: 0 0.2em;
+      border-radius: 0.2em;
+      font-weight: 600;
+      color: inherit;
     }
   </style>
 </BaseLayout>

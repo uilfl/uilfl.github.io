@@ -79,3 +79,41 @@ export function getAllTags(posts: CollectionEntry<'public'>[]): Map<string, Coll
   }
   return map;
 }
+
+/**
+ * Get unique tags with their count, sorted by count descending.
+ */
+export function getUniqueTagsWithCount(
+  posts: CollectionEntry<'public'>[]
+): Array<[tag: string, count: number]> {
+  const tagMap = getAllTags(posts);
+  const tagsWithCount = Array.from(tagMap.entries()).map(([tag, posts]) => [tag, posts.length] as const);
+  return tagsWithCount.sort((a, b) => b[1] - a[1]);
+}
+
+/**
+ * Group posts by year, sorted descending (newest year first).
+ */
+export function getPostsByYear(
+  posts: CollectionEntry<'public'>[]
+): Array<[year: number, posts: CollectionEntry<'public'>[]]> {
+  const yearMap = new Map<number, CollectionEntry<'public'>[]>();
+  for (const post of posts) {
+    const year = post.data.date?.getFullYear() ?? 0;
+    const existing = yearMap.get(year) ?? [];
+    existing.push(post);
+    yearMap.set(year, existing);
+  }
+  return Array.from(yearMap.entries()).sort((a, b) => b[0] - a[0]);
+}
+
+/**
+ * Paginate an array into chunks.
+ */
+export function paginate<T>(items: T[], pageSize: number): T[][] {
+  const pages: T[][] = [];
+  for (let i = 0; i < items.length; i += pageSize) {
+    pages.push(items.slice(i, i + pageSize));
+  }
+  return pages;
+}

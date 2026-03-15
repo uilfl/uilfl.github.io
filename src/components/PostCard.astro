@@ -1,30 +1,156 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { getPostSlug, formatDate } from '@/lib/posts';
+import { getPostSlug, readingTime } from '@/lib/posts';
 
 interface Props {
   post: CollectionEntry<'public'>;
+  compact?: boolean;
+  body?: string;
 }
 
-const { post } = Astro.props;
+const { post, compact = false, body = '' } = Astro.props;
 const slug = getPostSlug(post);
+const readTime = body ? readingTime(body) : 0;
+
+const shortDate = post.data.date
+  ? post.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  : '';
+
+const hasImage = !!post.data.heroImage;
+const highlightColor = post.data.heroImage?.color;
+
+// Only set CSS custom properties when there's a color to highlight
+const highlightStyle = highlightColor
+  ? { '--preview-highlight': `color-mix(in srgb,${highlightColor} 40%,var(--color-primary))`, '--preview-highlight-bg': `color-mix(in srgb,${highlightColor} 20%,transparent)` }
+  : undefined;
 ---
 
-<article class="group">
-  <a href={`/${slug}/`} class="block py-4 -mx-2 px-2 rounded-md hover:bg-(--color-surface) transition-colors">
-    <h3 class="text-lg font-semibold text-(--color-primary) group-hover:text-(--color-accent) transition-colors">
-      {post.data.title}
-    </h3>
-    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-sm text-(--color-muted)">
-      {post.data.date && (
-        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+{compact ? (
+  <!-- Compact: simple inline date + title row -->
+  <li class="group">
+    <a
+      href={`/${slug}/`}
+      class="flex items-baseline gap-3 py-2 -mx-2 px-2 rounded-md hover:bg-(--color-surface) transition-colors"
+    >
+      <time
+        class="text-sm text-(--color-muted) whitespace-nowrap tabular-nums"
+        datetime={post.data.date?.toISOString()}
+      >
+        {shortDate}
+      </time>
+      <span class="text-(--color-primary) group-hover:text-(--color-accent) transition-colors truncate">
+        {post.data.title}
+      </span>
+    </a>
+  </li>
+) : (
+  <!-- Blog listing card (matches astro-pure) -->
+  <li class="post-preview" style={highlightStyle}>
+    <a
+      href={`/${slug}/`}
+      class:list={[
+        'block w-full relative group rounded-2xl border border-(--color-border) bg-(--color-bg)',
+        'transition-colors ease-in-out px-5 py-2.5 hover:bg-(--color-surface) hover:text-(--color-accent)',
+        'max-sm:px-4 sm:py-5',
+        hasImage && 'max-md:pt-24',
+      ]}
+    >
+      {/* Hero image overlay */}
+      {hasImage && (
+        <img
+          src={post.data.heroImage!.src}
+          alt={post.data.heroImage!.alt || post.data.title}
+          class="cover-image absolute end-0 top-0 z-0 h-2/3 w-full rounded-2xl object-cover opacity-50 transition-opacity duration-300 group-hover:opacity-70 md:h-full md:w-3/5"
+          loading="lazy"
+          decoding="async"
+        />
       )}
-      {post.data.categories.length > 0 && (
-        <span>{post.data.categories.join(', ')}</span>
-      )}
-    </div>
-    {post.data.excerpt && (
-      <p class="mt-2 text-sm text-(--color-muted) line-clamp-2">{post.data.excerpt}</p>
-    )}
-  </a>
-</article>
+
+      {/* Content layer above image */}
+      <div class="relative flex flex-col gap-1" style="z-index:1">
+        {/* Date */}
+        <span class="text-(--color-muted) font-mono min-w-[95px] text-xs">
+          <time datetime={post.data.date?.toISOString()}>
+            {shortDate}
+          </time>
+        </span>
+
+        {/* Title + animated arrow */}
+        <div class="flex justify-between flex-grow">
+          <div class="font-medium">
+            {post.data.title}
+          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16" height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="preview-redirect my-1 stroke-(--color-muted) group-hover:stroke-(--color-accent) transition-all duration-300"
+          >
+            <line
+              x1="5" y1="12" x2="19" y2="12"
+              class="translate-x-4 scale-x-0 transition-all duration-300 ease-in-out group-hover:translate-x-1 group-hover:scale-x-100"
+            />
+            <polyline
+              points="12 5 19 12 12 19"
+              class="translate-x-0 transition-all duration-300 ease-in-out group-hover:translate-x-1"
+            />
+          </svg>
+        </div>
+
+        {/* Excerpt */}
+        {post.data.excerpt && (
+          <p class:list={[
+            'line-clamp-2 text-sm text-(--color-muted) sm:line-clamp-3',
+            hasImage && 'sm:me-24',
+          ]}>
+            {post.data.excerpt}
+          </p>
+        )}
+
+        {/* Metadata row: reading time */}
+        <div class="py-2 flex items-center gap-2 text-sm italic leading-4 text-(--color-muted)">
+          {readTime > 0 && (
+            <span class="flex items-center gap-1">
+              <svg aria-hidden="true" class="size-4" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path fill="currentColor" d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2m0 2a8 8 0 1 0 0 16a8 8 0 0 0 0-16m0 2a1 1 0 0 1 .993.883L13 7v4.586l2.707 2.707a1 1 0 0 1-1.32 1.497l-.094-.083l-3-3a1 1 0 0 1-.284-.576L11 12V7a1 1 0 0 1 1-1" />
+              </svg>
+              {readTime} min
+            </span>
+          )}
+        </div>
+
+        {/* Tags */}
+        {post.data.tags.length > 0 && (
+          <object title="Tags" aria-label="Tags" aria-labelledby="Tags">
+            <ul class="tag-list mt-1 flex gap-2 flex-wrap">
+              {post.data.tags.map((tag) => (
+                <li>
+                  <a
+                    href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}/`}
+                    class="group inline-flex items-center gap-x-1 rounded-xl bg-(--color-surface) border border-(--color-border) px-2 py-1 text-sm text-(--color-muted) transition-all hover:bg-(--color-bg) no-underline"
+                  >
+                    <p class="my-0">{tag}</p>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </object>
+        )}
+      </div>
+    </a>
+  </li>
+)}
+
+<style>
+  /* When a post has --preview-highlight set, use it for the title on hover */
+  .post-preview:hover .font-medium {
+    color: var(--preview-highlight, inherit);
+  }
+  .post-preview:hover {
+    background-color: var(--preview-highlight-bg, transparent);
+  }
+</style>

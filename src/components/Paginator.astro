@@ -1,0 +1,59 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+const getPaginationUrl = (page: number): string => {
+  if (page === 1) return baseUrl;
+  return `${baseUrl}${page}/`;
+};
+
+const prevUrl = currentPage > 1 ? getPaginationUrl(currentPage - 1) : null;
+const nextUrl = currentPage < totalPages ? getPaginationUrl(currentPage + 1) : null;
+const showPageNumber = totalPages > 1;
+---
+
+{showPageNumber && (
+  <nav
+    class="flex items-center justify-between gap-4 py-6 border-t border-(--color-border) mt-8"
+    aria-label="Pagination"
+  >
+    <div class="flex-1">
+      {prevUrl ? (
+        <a
+          href={prevUrl}
+          class="inline-flex items-center gap-1.5 px-3 py-2 rounded-md hover:bg-(--color-surface) transition-colors text-sm font-medium text-(--color-accent)"
+          rel="prev"
+        >
+          <span>←</span>
+          <span>Previous</span>
+        </a>
+      ) : (
+        <div class="text-sm text-(--color-muted)">← Previous</div>
+      )}
+    </div>
+
+    <div class="text-sm text-(--color-muted) text-center">
+      Page {currentPage} of {totalPages}
+    </div>
+
+    <div class="flex-1 text-right">
+      {nextUrl ? (
+        <a
+          href={nextUrl}
+          class="inline-flex items-center gap-1.5 px-3 py-2 rounded-md hover:bg-(--color-surface) transition-colors text-sm font-medium text-(--color-accent)"
+          rel="next"
+        >
+          <span>Next</span>
+          <span>→</span>
+        </a>
+      ) : (
+        <div class="text-sm text-(--color-muted)">Next →</div>
+      )}
+    </div>
+  </nav>
+)}

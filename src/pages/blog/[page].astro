@@ -1,0 +1,75 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import Paginator from '@/components/Paginator.astro';
+import TagsSidebar from '@/components/TagsSidebar.astro';
+import { getCollection } from 'astro:content';
+import { sortByDate, getUniqueTagsWithCount, paginate } from '@/lib/posts';
+
+const POSTS_PER_PAGE = 6;
+
+export async function getStaticPaths() {
+  const POSTS_PER_PAGE = 6;
+  const allPosts = sortByDate(await getCollection('public'));
+  const paginatedPosts = paginate(allPosts, POSTS_PER_PAGE);
+
+  return Array.from({ length: paginatedPosts.length }, (_, i) => ({
+    params: { page: String(i + 1) },
+  }));
+}
+
+const allPosts = sortByDate(await getCollection('public'));
+const tagsWithCount = getUniqueTagsWithCount(allPosts);
+const paginatedPosts = paginate(allPosts, POSTS_PER_PAGE);
+
+const page = parseInt(Astro.params.page || '1');
+const totalPages = paginatedPosts.length;
+const postsOnPage = paginatedPosts[page - 1] || [];
+
+if (page > totalPages && page !== 1) {
+  return Astro.redirect('/blog/');
+}
+---
+
+<BaseLayout title={`Blog - Page ${page}`}>
+  <div id="content-header">
+    <h1 class="mb-6 mt-6 text-3xl font-medium sm:mt-10">Blog</h1>
+  </div>
+
+  <div class="grid gap-y-16 sm:grid-cols-[3fr_1fr] sm:gap-x-8">
+    <!-- Main content -->
+    <section aria-label="Blog posts list" id="content">
+      <div class="mb-3 flex flex-col justify-between text-sm sm:mb-5 sm:flex-row">
+        <span class="text-(--color-muted)">
+          Page {page} - Showing {postsOnPage.length} of {allPosts.length} posts
+        </span>
+        <a aria-label="View all blog posts by year" href="/archives/" class="text-(--color-accent) hover:underline">
+          View all posts by year &rarr;
+        </a>
+      </div>
+
+      {postsOnPage.length > 0 ? (
+        <>
+          <ul class="flex flex-col gap-y-4 text-start">
+            {postsOnPage.map((post) => (
+              <PostCard post={post} body={post.body} />
+            ))}
+          </ul>
+
+          <Paginator
+            currentPage={page}
+            totalPages={totalPages}
+            baseUrl="/blog/"
+          />
+        </>
+      ) : (
+        <p class="text-(--color-muted) text-center py-12">
+          No posts found.
+        </p>
+      )}
+    </section>
+
+    <!-- Sidebar -->
+    <TagsSidebar tags={tagsWithCount} />
+  </div>
+</BaseLayout>
