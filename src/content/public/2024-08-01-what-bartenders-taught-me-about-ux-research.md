@@ -1,6 +1,7 @@
 ---
 title: "What Bartenders Taught Me About UX Research"
 date: 2024-08-01
+location: "Taipei"
 excerpt: "How a customer's question about lager and fries changed my understanding of menus, frontline knowledge, and field research."
 tags:
   - field-research
