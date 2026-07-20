@@ -18,13 +18,23 @@ const { author, education, projects } = siteConfig;
   <HeroCard />
 
   <!-- About -->
-  <section class="mt-10">
-    <h2 class="text-lg font-bold text-(--color-primary) mb-3">About</h2>
-    <p class="text-sm text-(--color-muted) leading-relaxed">{author.tagline}</p>
-    <p class="text-sm text-(--color-muted) leading-relaxed mt-2">{author.bio}</p>
-    <a href="/about/" class="inline-block mt-3 text-sm text-(--color-accent) hover:underline">
-      More about me &rarr;
-    </a>
+  <section class="mt-12">
+    <div class="flex items-baseline justify-between gap-4 flex-wrap">
+      <h2 class="text-xl sm:text-2xl font-bold text-(--color-primary)">About</h2>
+      <a href="/about/" class="text-sm sm:text-base text-(--color-accent) hover:underline">
+        More about me &rarr;
+      </a>
+    </div>
+    <div class="mt-4 rounded-2xl border border-(--color-border) bg-(--color-surface) p-5 sm:p-6">
+      <p class="text-base sm:text-lg text-(--color-muted) leading-relaxed max-w-prose">
+        {author.bio}
+      </p>
+      <div class="mt-4 flex items-center gap-2 text-sm sm:text-base text-(--color-muted)">
+        <span class="font-medium text-(--color-primary)">{author.tagline}</span>
+        <span aria-hidden="true">·</span>
+        <span>{author.location}</span>
+      </div>
+    </div>
   </section>
 
   <!-- Posts -->

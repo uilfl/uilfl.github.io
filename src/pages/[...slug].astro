@@ -27,6 +27,7 @@ const { Content } = await render(post);
 <PostLayout
   title={post.data.title}
   date={post.data.date}
+  location={post.data.location}
   categories={post.data.categories}
   tags={post.data.tags}
   rawContent={post.body ?? ''}

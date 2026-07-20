@@ -26,7 +26,6 @@ const highlightStyle = highlightColor
 ---
 
 {compact ? (
-  <!-- Compact: simple inline date + title row -->
   <li class="group">
     <a
       href={`/${slug}/`}
@@ -44,7 +43,6 @@ const highlightStyle = highlightColor
     </a>
   </li>
 ) : (
-  <!-- Blog listing card (matches astro-pure) -->
   <li class="post-preview" style={highlightStyle}>
     <a
       href={`/${slug}/`}
