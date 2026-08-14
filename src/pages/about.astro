@@ -1,68 +1,71 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import AuthorCard from '@/components/AuthorCard.astro';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AuthorCard from "@/components/AuthorCard.astro";
 ---
 
 <BaseLayout title="About Me">
-  <article class="prose max-w-none">
-    <h2>Hello, I'm Yusheng Chen!</h2>
+    <article class="prose max-w-none">
+        <h2>Hello, I'm Yusheng Chen!</h2>
 
-    <p>
-      I'm a designer based in Taipei.
-    </p>
+        <p>I'm a designer and a builder in Ann Arbor, MI, USA now</p>
 
-    <h2>Professional Journey</h2>
+        <h2>Professional Journey</h2>
+        <p>
+            With a background in linguistics and design with a passion for
+            technology, I've had the opportunity to hone my skills in system
+            architecture and cloud computing while working in Taipei's tech
+            scene. Now served as student in Ann Arbor
+        </p>
 
-    <p>
-      With a background in computer science and a passion for technology, I've had
-      the opportunity to hone my skills in system architecture and cloud computing
-      while working in Taipei's tech scene.
-    </p>
+        <h3>Technical Expertise</h3>
 
-    <h3>Technical Expertise</h3>
+        <ul>
+            <li>
+                <strong>Languages</strong>: Python, JavaScript, C++ and Rust
+            </li>
+            <li><strong>Frontend</strong>: React, Vue.js, Next.js</li>
+            <li><strong>Backend</strong>: Node.js, Django, fastapi</li>
+            <li><strong>Cloud</strong>: AWS, GCP</li>
+            <li><strong>DevOps</strong>: Docker, Kubernetes, CI/CD</li>
+            <li><strong>Data</strong>: PostgreSQL, supabase, Redis</li>
+        </ul>
 
-    <ul>
-      <li><strong>Languages</strong>: Python, JavaScript, Java, Go</li>
-      <li><strong>Frontend</strong>: React, Vue.js, Next.js</li>
-      <li><strong>Backend</strong>: Node.js, Django, Spring Boot</li>
-      <li><strong>Cloud</strong>: AWS, GCP, Azure</li>
-      <li><strong>DevOps</strong>: Docker, Kubernetes, CI/CD</li>
-      <li><strong>Data</strong>: SQL, MongoDB, Redis</li>
-    </ul>
+        <h2>Current Focus</h2>
 
-    <h2>Current Focus</h2>
+        <ul>
+            <li>Working on improving development workflows and automation</li>
+            <li>Learning new technologies and best practices</li>
+            <li>Documenting my journey through this blog</li>
+        </ul>
 
-    <ul>
-      <li>Working on improving development workflows and automation</li>
-      <li>Learning new technologies and best practices</li>
-      <li>Documenting my journey through this blog</li>
-    </ul>
+        <h2>Why This Blog?</h2>
 
-    <h2>Why This Blog?</h2>
+        <p>This blog serves as my digital workspace where I:</p>
 
-    <p>This blog serves as my digital workspace where I:</p>
+        <ul>
+            <li>Share technical insights and solutions</li>
+            <li>Explore the intersection of technology and design</li>
+            <li>My ideas and opinions from my work</li>
+        </ul>
 
-    <ul>
-      <li>Share technical insights and solutions</li>
-      <li>Explore the intersection of technology and design</li>
-      <li>Provide practical guides and tutorials</li>
-    </ul>
+        <h2>Connect With Me</h2>
 
-    <h2>Connect With Me</h2>
+        <ul>
+            <li>GitHub: <a href="https://github.com/uilfl">uilfl</a></li>
+            <li>Based in: Ann Arbor</li>
+            <li>Open for collaboration on interesting projects</li>
+        </ul>
 
-    <ul>
-      <li>GitHub: <a href="https://github.com/uilfl">uilfl</a></li>
-      <li>Based in: Taipei</li>
-      <li>Open for collaboration on interesting projects</li>
-    </ul>
+        <hr />
 
-    <hr />
+        <p>
+            <em
+                >Interested in collaboration or have questions about my
+                workflow? Feel free to reach out through GitHub or any of the
+                channels above!</em
+            >
+        </p>
+    </article>
 
-    <p>
-      <em>Interested in collaboration or have questions about my workflow?
-      Feel free to reach out through GitHub or any of the channels above!</em>
-    </p>
-  </article>
-
-  <AuthorCard class="mt-10" />
+    <AuthorCard class="mt-10" />
 </BaseLayout>
